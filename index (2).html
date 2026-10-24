@@ -1,0 +1,482 @@
+<title>Viriya Dhamma Pratama | Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<style>
+  /*
+    Design Concept: "The Gallery Archive"
+    A minimal, high-contrast layout that treats the portfolio like a curated art exhibition.
+    Focus on generous negative space, sophisticated typography, and a rhythmic grid.
+  */
+  :root {
+    --bg: #ffffff;
+    --fg: #1a1a1a;
+    --accent: #555555;
+    --muted: #f5f5f5;
+    --border: #e0e0e0;
+    --text-main: #333333;
+
+    --font-display: 'Playfair Display', serif;
+    --font-body: 'Inter', sans-serif;
+    --font-mono: 'JetBrains Mono', monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0a0a0a;
+      --fg: #efefef;
+      --accent: #a0a0a0;
+      --muted: #161616;
+      --border: #262626;
+      --text-main: #cccccc;
+      color-scheme: dark;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --bg: #0a0a0a;
+    --fg: #efefef;
+    --accent: #a0a0a0;
+    --muted: #161616;
+    --border: #262626;
+    --text-main: #cccccc;
+    color-scheme: dark;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    line-height: 1.6;
+    margin: 0;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 4rem;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  h1, h2, h3 {
+    font-family: var(--font-display);
+    font-weight: 400;
+    text-wrap: balance;
+    margin-top: 0;
+  }
+
+  .container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  /* --- Navigation --- */
+  nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 8rem;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 3rem;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: 2rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--fg);
+    font-family: var(--font-mono);
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    transition: color 0.3s ease;
+  }
+
+  .nav-links a:hover {
+    color: var(--accent);
+  }
+
+  .hero-title {
+    font-size: clamp(2.5rem, 8vw, 4rem);
+    line-height: 1.1;
+    margin-bottom: 0;
+    letter-spacing: -0.02em;
+  }
+
+  /* --- Sections --- */
+  section {
+    margin-bottom: 8rem;
+    display: none; /* Hidden by default for SPA feel */
+  }
+
+  section.active {
+    display: block;
+    animation: fadeIn 0.5s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .section-label {
+    font-family: var(--font-mono);
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 2rem;
+    display: block;
+    letter-spacing: 0.2em;
+  }
+
+  /* --- Skills Grid --- */
+  .skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+  }
+
+  .skill-item {
+    border-left: 1px solid var(--border);
+    padding-left: 1.5rem;
+    transition: border-color 0.3s ease;
+  }
+
+  .skill-item:hover {
+    border-left-color: var(--fg);
+  }
+
+  .skill-name {
+    font-family: var(--font-display);
+    font-size: 1.5rem;
+    display: block;
+    margin-bottom: 0.5rem;
+  }
+
+  /* --- Education Timeline --- */
+  .education-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .edu-item {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    padding: 1.5rem 0;
+    border-bottom: 1px solid var(--border);
+    align-items: baseline;
+  }
+
+  .edu-school {
+    font-size: 1.1rem;
+    font-weight: 500;
+  }
+
+  .edu-status {
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+
+  /* --- Works Gallery --- */
+  .works-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+  }
+
+  .work-item {
+    background: var(--muted);
+    aspect-ratio: 4/5;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    border: 1px solid var(--border);
+  }
+
+  .work-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.5s ease;
+  }
+
+  .work-item:hover img {
+    transform: scale(1.05);
+  }
+
+  .work-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 2rem;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    color: #fff;
+  }
+
+  .work-item:hover .work-overlay {
+    opacity: 1;
+  }
+
+  .work-title {
+    font-family: var(--font-display);
+    font-size: 1.2rem;
+    margin-bottom: 0.2rem;
+  }
+
+  .work-category {
+    font-family: var(--font-mono);
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    opacity: 0.8;
+  }
+
+  /* --- Contact --- */
+  .contact-container {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+    max-width: 600px;
+  }
+
+  .contact-link {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 2rem 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none;
+    color: var(--fg);
+    transition: opacity 0.3s ease;
+  }
+
+  .contact-link:hover {
+    opacity: 0.6;
+  }
+
+  .contact-name {
+    font-family: var(--font-display);
+    font-size: 1.8rem;
+  }
+
+  .contact-handle {
+    font-family: var(--font-mono);
+    font-size: 0.9rem;
+    color: var(--accent);
+  }
+
+  /* --- Profile Photo --- */
+  .profile-container {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 3rem;
+  }
+  .profile-pic {
+    width: 180px;
+    height: 180px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid var(--border);
+    transition: border-color 0.3s ease;
+  }
+  .profile-pic:hover {
+    border-color: var(--fg);
+  }
+
+  footer {
+    margin-top: 10rem;
+    padding-top: 3rem;
+    border-top: 1px solid var(--border);
+    text-align: center;
+    font-family: var(--font-mono);
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+
+  @media (max-width: 600px) {
+    nav {
+      flex-direction: column;
+      gap: 2rem;
+      align-items: flex-start;
+    }
+    .nav-links {
+      gap: 1rem;
+    }
+    .edu-item {
+      grid-template-columns: 1fr;
+      gap: 0.5rem;
+    }
+  }
+</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=JetBrains+Mono&family=Playfair+Display:ital,wght@0,400;1,400&display=swap">
+
+<div class="container">
+  <nav>
+    <h1 class="hero-title" style="font-size: 1.5rem; margin-bottom: 0;">Viriya Dhamma Pratama</h1>
+    <ul class="nav-links">
+      <li><a href="#about" onclick="showPage('about')">About</a></li>
+      <li><a href="#works" onclick="showPage('works')">Works</a></li>
+      <li><a href="#contact" onclick="showPage('contact')">Contact</a></li>
+    </ul>
+  </nav>
+
+  <section id="about" class="active">
+    <span class="section-label">About Me</span>
+
+    <div class="profile-container">
+      <img src="C:\Viriya\Contemplative Monochrome Studio Portrait.png" alt="Viriya Dhamma Pratama" class="profile-pic">
+    </div>
+
+    <h2 style="font-size: clamp(2rem, 5vw, 3rem); margin-bottom: 2rem; text-align: center;">Visual Artist & <br>Creative</h2>
+    <p style="font-size: 1.2rem; max-width: 600px; margin: 0 auto 4rem auto; text-align: center;">
+      Seorang kreator visual yang berfokus pada detail dan estetika. Menggabungkan seni menangkap momen melalui lensa dengan presisi editing untuk menciptakan narasi visual yang bermakna.
+    </p>
+
+
+    <span class="section-label">Expertise</span>
+    <div class="skills-grid" style="margin-bottom: 6rem;">
+      <div class="skill-item">
+        <span class="skill-name">Fotografi</span>
+        <p style="font-size: 0.9rem; color: var(--text-main);">Menangkap esensi melalui komposisi dan pencahayaan.</p>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Videografi</span>
+        <p style="font-size: 0.9rem; color: var(--text-main);">Bercerita melalui pergerakan dan ritme visual.</p>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Desain</span>
+        <p style="font-size: 0.9rem; color: var(--text-main);">Menerjemahkan ide menjadi bentuk visual yang fungsional.</p>
+      </div>
+      <div class="skill-item">
+        <span class="skill-name">Editing</span>
+        <p style="font-size: 0.9rem; color: var(--text-main);">Menyempurnakan karya dengan ketelitian teknis.</p>
+      </div>
+    </div>
+
+    <span class="section-label">Education</span>
+    <div class="education-list">
+      <div class="edu-item">
+        <span class="edu-school">Universitas Negeri Semarang</span>
+        <span class="edu-status">Present</span>
+      </div>
+      <div class="edu-item">
+        <span class="edu-school">SMA Negeri 1 Tuntang</span>
+        <span class="edu-status">Graduated</span>
+      </div>
+      <div class="edu-item">
+        <span class="edu-school">SMP Negeri 3 Tuntang</span>
+        <span class="edu-status">Graduated</span>
+      </div>
+      <div class="edu-item">
+        <span class="edu-school">SD Negeri Watuagung 1</span>
+        <span class="edu-status">Graduated</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="works">
+    <span class="section-label">Selected Works</span>
+    <div class="works-grid">
+      <!-- Placeholder works -->
+      <a href="https://www.instagram.com/reel/DehboP5Bu_A/?srtk=MXc3bzMybW9tZ2Jsag==" target="_blank" style="text-decoration: none; color: inherit;">
+        <div class="work-item">
+          <img src="C:\Viriya\DSC07538.jpg" alt="Work 1">
+          <div class="work-overlay">
+            <span class="work-title">Silent Movie</span>
+            <span class="work-category">Cinematography</span>
+          </div>
+        </div>
+      </a>
+      <a href="https://www.instagram.com/p/Ddqslc4POiP/?psln=MzRlODBiNWFlZA==&srtk=MzRlODBiNWFlZA==" target="_blank" style="text-decoration: none; color: inherit;">
+        <div class="work-item">
+          <img src="C:\Users\Dhamma\OneDrive\Pictures\Screenshots\Screenshot 2026-10-24 101717.png" alt="Work 2">
+          <div class="work-overlay">
+            <span class="work-title">Landscape</span>
+            <span class="work-category">Photography</span>
+          </div>
+        </div>
+      </a>
+      <a href="https://www.instagram.com/p/Dc6M7mTj8Z4/?xtok=OHpjYjlwOThsNGU2" target="_blank" style="text-decoration: none; color: inherit;">
+        <div class="work-item">
+          <img src="C:\Viriya\foto edit\foto edit\DSC03407.jpg" alt="Work 3">
+          <div class="work-overlay">
+            <span class="work-title">Light Painting</span>
+            <span class="work-category">Photography</span>
+          </div>
+        </div>
+      </a>
+      <a href="https://youtu.be/mO5lTkZdtsI" target="_blank" style="text-decoration: none; color: inherit;">
+        <div class="work-item">
+          <img src="C:\Users\Dhamma\OneDrive\Pictures\Screenshots\Screenshot 2026-10-24 091240.png" alt="Work 4">
+          <div class="work-overlay">
+            <span class="work-title">Masa SMA</span>
+            <span class="work-category">Drama Musikal</span>
+          </div>
+        </div>
+      </a>
+    </div>
+    <p style="margin-top: 2rem; font-family: var(--font-mono); font-size: 0.8rem; color: var(--accent);">* Portfolio pieces are illustrative placeholders.</p>
+  </section>
+
+  <section id="contact">
+    <span class="section-label">Get in Touch</span>
+    <div class="contact-container">
+      <a href="https://instagram.com/v_ryadhamma" target="_blank" class="contact-link">
+        <span class="contact-name">Instagram</span>
+        <span class="contact-handle">@v_ryadhamma</span>
+      </a>
+      <a href="www.linkedin.com/in/viriyadhammapratama" target="_blank" class="contact-link">
+        <span class="contact-name">LinkedIn</span>
+        <span class="contact-handle">Viriya Dhamma Pratama</span>
+      </a>
+      <a  href="https://wa.me/qr/4VBJCFJ3Q7Y5B1 " target="_blank" class="contact-link">
+        <span class="contact-name">WhatsApp</span>
+        <span class="contact-handle">Viriya Dhamma Pratama</span>
+      </a>
+      <a href="https://www.tiktok.com/@viriyadhammap?is_from_webapp=1&sender_device=pc" target="_blank" class="contact-link">
+        <span class="contact-name">TikTok</span>
+        <span class="contact-handle">Sirui</span>
+    </div>
+  </section>
+
+  <footer>
+    &copy; 2026 Viriya Dhamma Pratama. Built with precision.
+  </footer>
+</div>
+
+<script>
+  function showPage(pageId) {
+    // Hide all sections
+    document.querySelectorAll('section').forEach(sec => {
+      sec.classList.remove('active');
+    });
+    // Show selected section
+    document.getElementById(pageId).classList.add('active');
+
+    // Update URL hash without jumping
+    history.pushState(null, null, `#${pageId}`);
+  }
+
+  // Handle initial load and back/forward buttons
+  window.addEventListener('load', () => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById(hash)) {
+      showPage(hash);
+    }
+  });
+
+  window.addEventListener('popstate', () => {
+    const hash = window.location.hash.replace('#', '');
+    if (hash && document.getElementById(hash)) {
+      showPage(hash);
+    } else {
+      showPage('about');
+    }
+  });
+</script>
